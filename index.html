@@ -647,7 +647,7 @@
         <label for="entrada">
           <i class="fas fa-key"></i> Digite os números criptografados (separados por espaços):
         </label>
-        <input type="text" id="entrada" placeholder="Ex: 5 31 50 6" autocomplete="off">
+        <input type="text" id="entrada" placeholder="Ex: 5 31 25 3" autocomplete="off">
       </div>
       
       <button class="btn-primary" onclick="testarRegras()">
@@ -745,7 +745,7 @@
 
       document.getElementById('mensagem').value = original;
       document.getElementById('resultado').value = resultado.trim();
-      document.getElementById('regras').value = `Criptografia: y = ${a}x + ${b}\nDescriptografia: x = (y - ${b}) / ${a}`;
+      document.getElementById('regras').value = `Criptografia: y = ${a} / x + ${b}\nDescriptografia: x = (y - ${b}) / ${a}`;
       
       // Animate results
       const resultContainers = document.querySelectorAll('#tab1 .result-container');
