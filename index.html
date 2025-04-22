@@ -3,258 +3,687 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Criptografia e Descriptografia</title>
+  <title>Criptografia de Palavras</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-primary: #121212;
-      --bg-secondary: #1e1e1e;
-      --bg-tertiary: #2d2d2d;
-      --accent: #8b5cf6;
-      --accent-light: #a78bfa;
-      --text-primary: #ffffff;
+      --bg-primary: #0f0e17;
+      --bg-secondary: #18171f;
+      --bg-tertiary: #242336;
+      --bg-input: #1a192b;
+      
+      --accent: #7f5af0;
+      --accent-light: #9d79ff;
+      --accent-glow: rgba(127, 90, 240, 0.3);
+      
+      --text-primary: #fffffe;
       --text-secondary: #e0e0e0;
-      --text-muted: #a0a0a0;
-      --success: #10b981;
-      --border-radius: 8px;
+      --text-muted: #94a1b2;
+      
+      --success: #2cb67d;
+      --success-glow: rgba(44, 182, 125, 0.3);
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
-      padding: 16px;
-      line-height: 1.5;
-      max-width: 600px;
+      padding: 20px;
+      line-height: 1.6;
+      max-width: 700px;
       margin: 0 auto;
-    }
-    .tabs {
+      min-height: 100vh;
       display: flex;
-      margin-bottom: 16px;
+      align-items: center;
+      justify-content: center;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(127, 90, 240, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(44, 182, 125, 0.05) 0%, transparent 50%);
     }
-    .tab {
-      flex: 1;
-      padding: 12px;
-      text-align: center;
-      background-color: var(--bg-secondary);
-      color: var(--text-secondary);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all 0.3s ease;
-    }
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+
     .container {
       background-color: var(--bg-secondary);
       border-radius: var(--border-radius);
-      padding: 24px;
-      margin-bottom: 16px;
+      padding: 32px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+      overflow: hidden;
     }
-    .tab-content {
-      display: none;
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0.03;
+      z-index: 0;
+      pointer-events: none;
     }
-    .tab-content.active {
-      display: block;
-    }
+
     h1 {
       color: var(--text-primary);
-      font-size: 1.5rem;
-      margin-bottom: 20px;
+      font-size: 1.75rem;
+      margin-bottom: 28px;
       text-align: center;
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      position: relative;
     }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      width: 60px;
+      height: 3px;
+      background: var(--accent);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 3px;
+    }
+
     .form-group {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
     }
+
     label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       font-weight: 500;
       color: var(--text-secondary);
       font-size: 0.9rem;
+      transition: color 0.2s;
     }
+
     input, textarea {
       width: 100%;
-      padding: 12px;
-      border: 1px solid var(--bg-tertiary);
-      border-radius: var(--border-radius);
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius-sm);
       font-size: 1rem;
       font-family: inherit;
-      background-color: var(--bg-tertiary);
+      background-color: var(--bg-input);
       color: var(--text-primary);
-      transition: border-color 0.2s;
+      transition: all 0.2s ease;
       resize: none;
+      box-shadow: var(--shadow-sm);
     }
+
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
+
+    .form-group:focus-within label {
+      color: var(--accent-light);
+    }
+
     .input-row {
       display: flex;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 16px;
+      margin-bottom: 20px;
     }
+
     .input-row .form-group {
       flex: 1;
       margin-bottom: 0;
     }
+
     textarea {
       height: 80px;
       margin-bottom: 16px;
-      font-family: 'Courier New', monospace;
+      font-family: 'Inter', 'Courier New', monospace;
       font-size: 1rem;
+      line-height: 1.5;
     }
+
     .btn-group {
       display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 24px;
     }
+
     button {
       flex: 1;
       border: none;
-      border-radius: var(--border-radius);
-      padding: 12px;
-      font-size: 0.95rem;
-      font-weight: 500;
+      border-radius: var(--border-radius-sm);
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s;
+      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
     }
+
+    button::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: white;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    button:active::after {
+      opacity: 0.1;
+    }
+
     .btn-primary {
       background-color: var(--accent);
       color: white;
     }
+
     .btn-primary:hover {
       background-color: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(127, 90, 240, 0.3);
     }
+
     .btn-secondary {
       background-color: var(--bg-tertiary);
       color: var(--text-primary);
     }
+
     .btn-secondary:hover {
-      background-color: #3d3d3d;
+      background-color: #2e2c49;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(46, 44, 73, 0.3);
     }
+
     .btn-success {
       background-color: var(--success);
       color: white;
       width: 100%;
       margin-top: 8px;
     }
+
     .btn-success:hover {
-      background-color: #0da271;
+      background-color: #35d492;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px var(--success-glow);
     }
+
     .result-container {
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeInUp 0.5s forwards;
     }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-container:nth-child(1) { animation-delay: 0.1s; }
+    .result-container:nth-child(2) { animation-delay: 0.2s; }
+    .result-container:nth-child(3) { animation-delay: 0.3s; }
+
     h3 {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: var(--text-secondary);
       font-size: 1rem;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .resultado {
+
+    h3 i {
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+    
+    .machine-settings {
+      padding: 16px;
+      background-color: rgba(127, 90, 240, 0.05);
+      border-radius: var(--border-radius-sm);
+      margin-bottom: 24px;
+      border: 1px solid rgba(127, 90, 240, 0.1);
+    }
+    
+    .machine-title {
+      font-weight: 600;
+      color: var(--accent-light);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    /* Tooltip styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: help;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
       background-color: var(--bg-tertiary);
-      margin-top: 20px;
-      padding: 10px;
-      border-radius: var(--border-radius);
+      color: var(--text-secondary);
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.85rem;
+      font-weight: normal;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: var(--success);
+      color: white;
+      padding: 12px 20px;
+      border-radius: var(--border-radius-sm);
+      box-shadow: var(--shadow);
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Custom number input styles */
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+    .number-input-container {
+      position: relative;
+    }
+    
+    .number-controls {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    .number-control-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-size: 10px;
+      padding: 0;
+    }
+    
+    .number-control-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Tab styles */
+    .tabs {
+      display: flex;
+      margin-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .tab {
+      padding: 12px 24px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-bottom: 2px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .tab:hover {
       color: var(--text-secondary);
     }
-    @media (max-width: 480px) {
+    
+    .tab.active {
+      color: var(--accent-light);
+      border-bottom-color: var(--accent);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    /* Result styles for tab 2 */
+    .resultado-wrapper {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 20px;
+      padding-right: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--bg-tertiary);
+    }
+    
+    .resultado-wrapper::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .resultado-wrapper::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+    }
+    
+    .resultado-wrapper::-webkit-scrollbar-thumb {
+      background-color: var(--accent);
+      border-radius: 4px;
+    }
+    
+    .resultado {
+      background-color: var(--bg-tertiary);
+      border-radius: var(--border-radius-sm);
+      padding: 14px;
+      margin-bottom: 10px;
+      border-left: 3px solid var(--accent);
+      transition: transform 0.2s;
+    }
+    
+    .resultado:hover {
+      transform: translateX(4px);
+    }
+    
+    .resultado strong {
+      color: var(--accent-light);
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    
+    /* Loading indicator */
+    .loading {
+      display: none;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    
+    .loading.active {
+      display: flex;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(127, 90, 240, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--accent);
+      animation: spin 1s ease-in-out infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 600px) {
       body {
-        padding: 12px;
-      }
-      .container {
         padding: 16px;
       }
-      h1 {
-        font-size: 1.3rem;
-        margin-bottom: 16px;
+
+      .container {
+        padding: 20px;
       }
+
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+      }
+
       .input-row {
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
       }
+
       label {
         font-size: 0.85rem;
       }
+
       input, textarea, button {
-        font-size: 0.9rem;
-        padding: 10px;
+        font-size: 0.95rem;
+        padding: 12px;
       }
+
       textarea {
         height: 70px;
       }
+
       .form-group {
-        margin-bottom: 12px;
-      }
-      .btn-group {
         margin-bottom: 16px;
       }
+
+      .btn-group {
+        margin-bottom: 20px;
+      }
+
       h3 {
+        font-size: 0.9rem;
+      }
+      
+      .tab {
+        padding: 10px 16px;
         font-size: 0.9rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="tabs">
-    <div class="tab active" onclick="switchTab('criptografia')">Criptografia</div>
-    <div class="tab" onclick="switchTab('testar-regras')">Testar Regras</div>
-  </div>
-
-  <div id="criptografia" class="container tab-content active">
-    <h1>Criptografia e Descriptografia</h1>
-    <div class="form-group">
-      <label for="texto">Digite a palavra para criptografar ou os números para descriptografar:</label>
-      <input type="text" id="texto" placeholder="Ex: BOLA ou 5 31 50 6">
-    </div>
-    <div class="input-row">
-      <div class="form-group">
-        <label for="a1">Máquina - a:</label>
-        <input type="number" id="a1" value="2" min="1" max="5">
+  <div class="container">
+    <h1>Criptografia & Descriptografia</h1>
+    
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('tab1')">
+        <i class="fas fa-lock"></i> Criptografia
       </div>
-      <div class="form-group">
-        <label for="b1">Máquina - b:</label>
-        <input type="number" id="b1" value="1" min="0" max="5">
+      <div class="tab" onclick="switchTab('tab2')">
+        <i class="fas fa-search"></i> Testar Regras
       </div>
     </div>
-    <div class="btn-group">
-      <button class="btn-primary" onclick="criptografar()">Criptografar</button>
-      <button class="btn-secondary" onclick="descriptografar()">Descriptografar</button>
+    
+    <!-- Tab 1: Criptografia Original -->
+    <div id="tab1" class="tab-content active">
+      <div class="form-group">
+        <label for="texto">
+          <i class="fas fa-keyboard"></i> 
+          Digite a palavra para criptografar ou os números para descriptografar:
+        </label>
+        <input type="text" id="texto" placeholder="Ex: BOLA ou 5 31 50 6" autocomplete="off">
+      </div>
+
+      <div class="machine-settings">
+        <div class="machine-title">
+          <i class="fas fa-cogs"></i> Configurações da Máquina
+          <div class="tooltip">
+            <i class="fas fa-question-circle"></i>
+            <span class="tooltiptext">Defina os parâmetros da função y = ax + b para criptografia</span>
+          </div>
+        </div>
+        
+        <div class="input-row">
+          <div class="form-group">
+            <label for="a1">
+              <i class="fas fa-superscript"></i> Valor de a:
+            </label>
+            <div class="number-input-container">
+              <input type="number" id="a1" value="2" min="1" max="5">
+              <div class="number-controls">
+                <button class="number-control-btn" onclick="changeValue('a1', 1)"><i class="fas fa-chevron-up"></i></button>
+                <button class="number-control-btn" onclick="changeValue('a1', -1)"><i class="fas fa-chevron-down"></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="b1">
+              <i class="fas fa-plus"></i> Valor de b:
+            </label>
+            <div class="number-input-container">
+              <input type="number" id="b1" value="1" min="0" max="5">
+              <div class="number-controls">
+                <button class="number-control-btn" onclick="changeValue('b1', 1)"><i class="fas fa-chevron-up"></i></button>
+                <button class="number-control-btn" onclick="changeValue('b1', -1)"><i class="fas fa-chevron-down"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn-primary" onclick="criptografar()">
+          <i class="fas fa-lock"></i> Criptografar
+        </button>
+        <button class="btn-secondary" onclick="descriptografar()">
+          <i class="fas fa-unlock"></i> Descriptografar
+        </button>
+      </div>
+
+      <div class="result-container">
+        <h3><i class="fas fa-file-alt"></i> Mensagem Original ou Decodificada:</h3>
+        <textarea id="mensagem" readonly></textarea>
+      </div>
+
+      <div class="result-container">
+        <h3><i class="fas fa-shield-alt"></i> Mensagem Criptografada:</h3>
+        <textarea id="resultado" readonly></textarea>
+      </div>
+
+      <div class="result-container">
+        <h3><i class="fas fa-calculator"></i> Fórmula Utilizada:</h3>
+        <textarea id="regras" readonly></textarea>
+      </div>
+
+      <button class="btn-success" id="copiar-btn" onclick="copiarResultado()">
+        <i class="fas fa-copy"></i> Copiar Resultado
+      </button>
     </div>
-    <div class="result-container">
-      <h3>Mensagem Original ou Decodificada:</h3>
-      <textarea id="mensagem" readonly></textarea>
+    
+    <!-- Tab 2: Teste de Todas as Regras -->
+    <div id="tab2" class="tab-content">
+      <div class="form-group">
+        <label for="entrada">
+          <i class="fas fa-key"></i> Digite os números criptografados (separados por espaços):
+        </label>
+        <input type="text" id="entrada" placeholder="Ex: 5 31 50 6" autocomplete="off">
+      </div>
+      
+      <button class="btn-primary" onclick="testarRegras()">
+        <i class="fas fa-search"></i> Testar Todas as Regras
+      </button>
+      
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+      </div>
+      
+      <div class="resultado-wrapper">
+        <div id="resultados"></div>
+      </div>
     </div>
-    <div class="result-container">
-      <h3>Mensagem Criptografada:</h3>
-      <textarea id="resultado" readonly></textarea>
-    </div>
-    <div class="result-container">
-      <h3>Máquina Utilizada:</h3>
-      <textarea id="regras" readonly></textarea>
-    </div>
-    <button class="btn-success" id="copiar-btn" onclick="copiarResultado()">Copiar Resultado</button>
   </div>
 
-  <div id="testar-regras" class="container tab-content">
-    <h1>Testar Todas as Regras de Descriptografia</h1>
-    <label for="entrada">Digite os números criptografados (separados por espaço):</label>
-    <input type="text" id="entrada" placeholder="Ex: 5 31 50 6">
-    <button class="btn-primary" onclick="testarRegras()">Testar Todas as Regras</button>
-    <div id="resultados"></div>
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i> Copiado para a área de transferência!
   </div>
 
   <script>
     const tabela = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÇ';
 
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add focus animation for inputs
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('focus', () => {
+          input.parentElement.classList.add('focus');
+        });
+        input.addEventListener('blur', () => {
+          input.parentElement.classList.remove('focus');
+        });
+      });
+    });
+    
     function switchTab(tabName) {
       const tabs = document.querySelectorAll('.tab');
       const tabContents = document.querySelectorAll('.tab-content');
@@ -266,6 +695,19 @@
       document.getElementById(tabName).classList.add('active');
     }
 
+    function changeValue(elementId, increment) {
+      const element = document.getElementById(elementId);
+      const currentValue = parseInt(element.value) || 0;
+      const min = parseInt(element.min) || 0;
+      const max = parseInt(element.max) || 100;
+      
+      let newValue = currentValue + increment;
+      if (newValue < min) newValue = min;
+      if (newValue > max) newValue = max;
+      
+      element.value = newValue;
+    }
+
     function letraParaNumero(letra) {
       return tabela.indexOf(letra) + 1;
     }
@@ -274,12 +716,22 @@
       return tabela[numero - 1];
     }
 
+    function animateButton(buttonId) {
+      const button = document.getElementById(buttonId);
+      button.classList.add('animating');
+      setTimeout(() => {
+        button.classList.remove('animating');
+      }, 300);
+    }
+
     function criptografar() {
       const texto = document.getElementById('texto').value.toUpperCase().replace(/[^A-ZÇ\s\.,!?]/g, '');
       const a = parseInt(document.getElementById('a1').value);
       const b = parseInt(document.getElementById('b1').value);
+
       let resultado = '';
       let original = texto;
+
       for (let i = 0; i < texto.length; i++) {
         const char = texto[i];
         if (char === ' ' || ['.', ',', '!', '?'].includes(char)) {
@@ -290,9 +742,19 @@
           resultado += criptografado + ' ';
         }
       }
+
       document.getElementById('mensagem').value = original;
       document.getElementById('resultado').value = resultado.trim();
-      document.getElementById('regras').value = `Regra usada: y = ${a} x = ${b}`;
+      document.getElementById('regras').value = `Criptografia: y = ${a}x + ${b}\nDescriptografia: x = (y - ${b}) / ${a}`;
+      
+      // Animate results
+      const resultContainers = document.querySelectorAll('#tab1 .result-container');
+      resultContainers.forEach((container, index) => {
+        container.style.animation = 'none';
+        setTimeout(() => {
+          container.style.animation = `fadeInUp 0.5s forwards ${index * 0.1}s`;
+        }, 10);
+      });
     }
 
     function descriptografar() {
@@ -300,8 +762,10 @@
       const caracteres = entrada.split(/\s+/);
       const a = parseInt(document.getElementById('a1').value);
       const b = parseInt(document.getElementById('b1').value);
+
       let resultado = '';
       let mensagemOriginal = '';
+
       caracteres.forEach((caractere) => {
         if (['.', ',', '!', '?'].includes(caractere)) {
           resultado += caractere;
@@ -320,101 +784,113 @@
           }
         }
       });
+
       document.getElementById('mensagem').value = resultado;
       document.getElementById('resultado').value = entrada;
-      document.getElementById('regras').value = `Regra usada: x = (y - ${b}) / ${a}`;
+      document.getElementById('regras').value = `Descriptografia: x = (y - ${b}) / ${a}\nCriptografia: y = ${a}x + ${b}`;
+      
+      // Animate results
+      const resultContainers = document.querySelectorAll('#tab1 .result-container');
+      resultContainers.forEach((container, index) => {
+        container.style.animation = 'none';
+        setTimeout(() => {
+          container.style.animation = `fadeInUp 0.5s forwards ${index * 0.1}s`;
+        }, 10);
+      });
     }
 
     function copiarResultado() {
       const resultado = document.getElementById('resultado');
       resultado.select();
-      resultado.setSelectionRange(0, 99999);
+      resultado.setSelectionRange(0, 99999); // Para dispositivos móveis
+      
       if (navigator.clipboard) {
         navigator.clipboard.writeText(resultado.value)
           .then(() => {
-            showCopiedFeedback();
+            showNotification();
           })
           .catch(err => {
             document.execCommand('copy');
-            showCopiedFeedback();
+            showNotification();
           });
       } else {
         document.execCommand('copy');
-        showCopiedFeedback();
+        showNotification();
       }
     }
-
-    function showCopiedFeedback() {
+    
+    function showNotification() {
+      const notification = document.getElementById('notification');
+      notification.classList.add('show');
+      
+      // Animate button
       const btn = document.getElementById('copiar-btn');
-      const originalText = btn.textContent;
-      btn.textContent = 'Copiado!';
+      btn.style.animation = 'pulse 0.3s';
+      
       setTimeout(() => {
-        btn.textContent = originalText;
+        notification.classList.remove('show');
+        btn.style.animation = '';
       }, 2000);
     }
-
+    
     function testarRegras() {
-      const entrada = document.getElementById("entrada").value.trim();
+      const loading = document.getElementById('loading');
+      loading.classList.add('active');
+      
+      const entrada = document.getElementById('entrada').value.trim();
       const numeros = entrada.split(/\s+/).map(Number);
-      const resultadosDiv = document.getElementById("resultados");
+      const resultadosDiv = document.getElementById('resultados');
       resultadosDiv.innerHTML = '';
+      
+      // Use setTimeout to allow the loading indicator to render
+      setTimeout(() => {
+        let foundResults = false;
+        
+        for (let a = 1; a <= 5; a++) {
+          for (let b = 0; b <= 5; b++) {
+            let resultado = '';
+            let valido = true;
 
-      for (let a = 1; a <= 5; a++) {
-        for (let b = 1; b <= 5; b++) {
-          let resultado = '';
-          let valido = true;
+            for (let y of numeros) {
+              const x = (y - b) / a;
+              if (Number.isInteger(x) && x >= 1 && x <= tabela.length) {
+                resultado += numeroParaLetra(x);
+              } else {
+                valido = false;
+                break;
+              }
+            }
 
-          for (let y of numeros) {
-            const x = (y - b) / a;
-            if (Number.isInteger(x) && x >= 1 && x <= 27) {
-              resultado += numeroParaLetra(x);
-            } else {
-              valido = false;
-              break;
+            if (valido) {
+              foundResults = true;
+              const bloco = document.createElement('div');
+              bloco.className = 'resultado';
+              bloco.innerHTML = `<strong>Regra: a = ${a}, b = ${b}</strong>${resultado}`;
+              resultadosDiv.appendChild(bloco);
+              
+              // Add click functionality to copy to clipboard
+              bloco.addEventListener('click', function() {
+                const textToCopy = resultado;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                  showNotification();
+                });
+              });
             }
           }
-
-          if (valido) {
-            const bloco = document.createElement('div');
-            bloco.className = 'resultado';
-            bloco.innerHTML = `<strong>Regra a=${a}, b=${b}:</strong> ${resultado}`;
-            resultadosDiv.appendChild(bloco);
-          }
         }
-      }
+        
+        if (!foundResults) {
+          resultadosDiv.innerHTML = `
+            <div class="resultado" style="border-left-color: #ff5470;">
+              <strong><i class="fas fa-exclamation-triangle"></i> Nenhum resultado encontrado</strong>
+              Não foi possível encontrar regras válidas para esses números. Certifique-se de que os números foram inseridos corretamente.
+            </div>
+          `;
+        }
+        
+        loading.classList.remove('active');
+      }, 300);
     }
   </script>
 </body>
-</html>
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <title>Descriptografar com Todas as Regras</title>
-  <style>
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    h1 {
-      color: #0f0;
-    }
-    textarea, input, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      background: #111;
-      color: #fff;
-      border: 1px solid #333;
-    }
-    .resultado {
-      background-color: #111;
-      margin-top: 20px;
-      padding: 10px;
-      border: 1px solid #333;
-    }
-  </style>
-</head>
 </html>
