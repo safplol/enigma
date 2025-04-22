@@ -3,31 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Criptografia de Palavras</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <title>Criptografia e Descriptografia</title>
   <style>
     :root {
       --bg-primary: #121212;
       --bg-secondary: #1e1e1e;
       --bg-tertiary: #2d2d2d;
-      
-      --accent: #8b5cf6; /* Purple */
+      --accent: #8b5cf6;
       --accent-light: #a78bfa;
-      
       --text-primary: #ffffff;
       --text-secondary: #e0e0e0;
       --text-muted: #a0a0a0;
-      
       --success: #10b981;
       --border-radius: 8px;
     }
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-primary);
@@ -37,14 +31,36 @@
       max-width: 600px;
       margin: 0 auto;
     }
-
+    .tabs {
+      display: flex;
+      margin-bottom: 16px;
+    }
+    .tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background-color: var(--bg-secondary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
     .container {
       background-color: var(--bg-secondary);
       border-radius: var(--border-radius);
       padding: 24px;
       margin-bottom: 16px;
     }
-
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
     h1 {
       color: var(--text-primary);
       font-size: 1.5rem;
@@ -52,11 +68,9 @@
       text-align: center;
       font-weight: 600;
     }
-
     .form-group {
       margin-bottom: 16px;
     }
-
     label {
       display: block;
       margin-bottom: 6px;
@@ -64,7 +78,6 @@
       color: var(--text-secondary);
       font-size: 0.9rem;
     }
-
     input, textarea {
       width: 100%;
       padding: 12px;
@@ -77,36 +90,30 @@
       transition: border-color 0.2s;
       resize: none;
     }
-
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
     }
-
     .input-row {
       display: flex;
       gap: 12px;
       margin-bottom: 16px;
     }
-
     .input-row .form-group {
       flex: 1;
       margin-bottom: 0;
     }
-
     textarea {
       height: 80px;
       margin-bottom: 16px;
       font-family: 'Courier New', monospace;
       font-size: 1rem;
     }
-
     .btn-group {
       display: flex;
       gap: 8px;
       margin-bottom: 20px;
     }
-
     button {
       flex: 1;
       border: none;
@@ -120,88 +127,76 @@
       align-items: center;
       justify-content: center;
     }
-
     .btn-primary {
       background-color: var(--accent);
       color: white;
     }
-
     .btn-primary:hover {
       background-color: var(--accent-light);
     }
-
     .btn-secondary {
       background-color: var(--bg-tertiary);
       color: var(--text-primary);
     }
-
     .btn-secondary:hover {
       background-color: #3d3d3d;
     }
-
     .btn-success {
       background-color: var(--success);
       color: white;
       width: 100%;
       margin-top: 8px;
     }
-
     .btn-success:hover {
       background-color: #0da271;
     }
-
     .result-container {
       margin-bottom: 16px;
     }
-
     h3 {
       margin-bottom: 8px;
       color: var(--text-secondary);
       font-size: 1rem;
       font-weight: 500;
     }
-
-    /* Mobile-specific styles */
+    .resultado {
+      background-color: var(--bg-tertiary);
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: var(--border-radius);
+      color: var(--text-secondary);
+    }
     @media (max-width: 480px) {
       body {
         padding: 12px;
       }
-
       .container {
         padding: 16px;
       }
-
       h1 {
         font-size: 1.3rem;
         margin-bottom: 16px;
       }
-
       .input-row {
         flex-direction: column;
         gap: 12px;
       }
-
       label {
         font-size: 0.85rem;
       }
-
       input, textarea, button {
         font-size: 0.9rem;
         padding: 10px;
       }
-
       textarea {
         height: 70px;
       }
-
       .form-group {
         margin-bottom: 12px;
       }
-
       .btn-group {
         margin-bottom: 16px;
       }
-
       h3 {
         font-size: 0.9rem;
       }
@@ -209,51 +204,67 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Criptografia e Descriptografia</h1>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('criptografia')">Criptografia</div>
+    <div class="tab" onclick="switchTab('testar-regras')">Testar Regras</div>
+  </div>
 
+  <div id="criptografia" class="container tab-content active">
+    <h1>Criptografia e Descriptografia</h1>
     <div class="form-group">
       <label for="texto">Digite a palavra para criptografar ou os números para descriptografar:</label>
       <input type="text" id="texto" placeholder="Ex: BOLA ou 5 31 50 6">
     </div>
-
     <div class="input-row">
       <div class="form-group">
         <label for="a1">Máquina - a:</label>
         <input type="number" id="a1" value="2" min="1" max="5">
       </div>
-
       <div class="form-group">
         <label for="b1">Máquina - b:</label>
         <input type="number" id="b1" value="1" min="0" max="5">
       </div>
     </div>
-
     <div class="btn-group">
       <button class="btn-primary" onclick="criptografar()">Criptografar</button>
       <button class="btn-secondary" onclick="descriptografar()">Descriptografar</button>
     </div>
-
     <div class="result-container">
       <h3>Mensagem Original ou Decodificada:</h3>
       <textarea id="mensagem" readonly></textarea>
     </div>
-
     <div class="result-container">
       <h3>Mensagem Criptografada:</h3>
       <textarea id="resultado" readonly></textarea>
     </div>
-
     <div class="result-container">
       <h3>Máquina Utilizada:</h3>
       <textarea id="regras" readonly></textarea>
     </div>
-
     <button class="btn-success" id="copiar-btn" onclick="copiarResultado()">Copiar Resultado</button>
+  </div>
+
+  <div id="testar-regras" class="container tab-content">
+    <h1>Testar Todas as Regras de Descriptografia</h1>
+    <label for="entrada">Digite os números criptografados (separados por espaço):</label>
+    <input type="text" id="entrada" placeholder="Ex: 5 31 50 6">
+    <button class="btn-primary" onclick="testarRegras()">Testar Todas as Regras</button>
+    <div id="resultados"></div>
   </div>
 
   <script>
     const tabela = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÇ';
+
+    function switchTab(tabName) {
+      const tabs = document.querySelectorAll('.tab');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabs.forEach(tab => tab.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      document.getElementById(tabName).classList.add('active');
+    }
 
     function letraParaNumero(letra) {
       return tabela.indexOf(letra) + 1;
@@ -267,10 +278,8 @@
       const texto = document.getElementById('texto').value.toUpperCase().replace(/[^A-ZÇ\s\.,!?]/g, '');
       const a = parseInt(document.getElementById('a1').value);
       const b = parseInt(document.getElementById('b1').value);
-
       let resultado = '';
       let original = texto;
-
       for (let i = 0; i < texto.length; i++) {
         const char = texto[i];
         if (char === ' ' || ['.', ',', '!', '?'].includes(char)) {
@@ -281,7 +290,6 @@
           resultado += criptografado + ' ';
         }
       }
-
       document.getElementById('mensagem').value = original;
       document.getElementById('resultado').value = resultado.trim();
       document.getElementById('regras').value = `Regra usada: y = ${a} x = ${b}`;
@@ -292,10 +300,8 @@
       const caracteres = entrada.split(/\s+/);
       const a = parseInt(document.getElementById('a1').value);
       const b = parseInt(document.getElementById('b1').value);
-
       let resultado = '';
       let mensagemOriginal = '';
-
       caracteres.forEach((caractere) => {
         if (['.', ',', '!', '?'].includes(caractere)) {
           resultado += caractere;
@@ -314,7 +320,6 @@
           }
         }
       });
-
       document.getElementById('mensagem').value = resultado;
       document.getElementById('resultado').value = entrada;
       document.getElementById('regras').value = `Regra usada: x = (y - ${b}) / ${a}`;
@@ -323,8 +328,7 @@
     function copiarResultado() {
       const resultado = document.getElementById('resultado');
       resultado.select();
-      resultado.setSelectionRange(0, 99999); // Para dispositivos móveis
-      
+      resultado.setSelectionRange(0, 99999);
       if (navigator.clipboard) {
         navigator.clipboard.writeText(resultado.value)
           .then(() => {
@@ -339,16 +343,78 @@
         showCopiedFeedback();
       }
     }
-    
+
     function showCopiedFeedback() {
       const btn = document.getElementById('copiar-btn');
       const originalText = btn.textContent;
       btn.textContent = 'Copiado!';
-      
       setTimeout(() => {
         btn.textContent = originalText;
       }, 2000);
     }
+
+    function testarRegras() {
+      const entrada = document.getElementById("entrada").value.trim();
+      const numeros = entrada.split(/\s+/).map(Number);
+      const resultadosDiv = document.getElementById("resultados");
+      resultadosDiv.innerHTML = '';
+
+      for (let a = 1; a <= 5; a++) {
+        for (let b = 1; b <= 5; b++) {
+          let resultado = '';
+          let valido = true;
+
+          for (let y of numeros) {
+            const x = (y - b) / a;
+            if (Number.isInteger(x) && x >= 1 && x <= 27) {
+              resultado += numeroParaLetra(x);
+            } else {
+              valido = false;
+              break;
+            }
+          }
+
+          if (valido) {
+            const bloco = document.createElement('div');
+            bloco.className = 'resultado';
+            bloco.innerHTML = `<strong>Regra a=${a}, b=${b}:</strong> ${resultado}`;
+            resultadosDiv.appendChild(bloco);
+          }
+        }
+      }
+    }
   </script>
 </body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Descriptografar com Todas as Regras</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #0f0;
+    }
+    textarea, input, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+    }
+    .resultado {
+      background-color: #111;
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
 </html>
